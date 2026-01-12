@@ -73,6 +73,19 @@ Create `.env` files based on the samples below.
   - GET /api/admin/papers (admin)
   - PUT /api/admin/papers/:id/approve (admin)
   - PUT /api/admin/papers/:id/reject (admin)
+- Leaderboard
+  - GET /api/leaderboard?type=uploads
+  - GET /api/leaderboard?type=views
+  - GET /api/badges/:userId
+
+## Features
+
+- 🔐 User authentication (Signup/Login)
+- 📄 Paper upload with AI authenticity checking
+- 🏆 Badge system and achievements
+- 📊 Leaderboard (Top Contributors & Most Popular)
+- 👥 Admin panel for paper approval
+- 🎨 Gamified UI with interactive elements
 
 ## Quick Start
 
