@@ -16,29 +16,6 @@ campuspapers/
 - ai-service/
 - frontend/
 
-## Environment Variables
-
-Create `.env` files based on the samples below.
-
-### backend/.env
-
-- PORT=5000
-- MONGO_URI=your_mongodb_atlas_connection_string
-- JWT_SECRET=super_secret_string
-- CLOUDINARY_CLOUD_NAME=your_cloud_name
-- CLOUDINARY_API_KEY=your_api_key
-- CLOUDINARY_API_SECRET=your_api_secret
-- AI_SERVICE_URL=http://127.0.0.1:8000
-- CLIENT_URL=http://127.0.0.1:5173
-
-### ai-service/.env
-
-- ALLOW_ORIGINS=*
-
-### frontend/.env
-
-- VITE_API_BASE=http://127.0.0.1:5000
-
 ## Backend: Scripts
 
 - install: npm install
@@ -85,7 +62,6 @@ Create `.env` files based on the samples below.
 - 🏆 Badge system and achievements
 - 📊 Leaderboard (Top Contributors & Most Popular)
 - 👥 Admin panel for paper approval
-- 🎨 Gamified UI with interactive elements
 
 ## Quick Start
 
