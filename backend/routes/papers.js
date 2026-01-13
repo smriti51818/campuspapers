@@ -58,16 +58,64 @@ router.post('/papers/:id/view', async (req, res) => {
 router.post('/papers/upload', protect, upload.single('file'), async (req, res) => {
   try {
     const { department, subject, year, semester, university } = req.body
-    if (!req.file) return res.status(400).json({ message: 'No file' })
+    
+    // Validate required fields
+    if (!department || !subject || !year || !semester) {
+      return res.status(400).json({ message: 'Department, subject, year, and semester are required' })
+    }
+    
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' })
+    }
 
-    const result = await uploadToCloudinary(req.file.buffer)
+    // Check Cloudinary configuration
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      console.error('Cloudinary credentials missing')
+      return res.status(500).json({ message: 'Cloudinary configuration missing' })
+    }
 
+    // Upload to Cloudinary
+    let result
     try {
-      const payload = {
-        metadata: { department, subject, year: Number(year), semester, university },
-        file_url: result.secure_url
+      result = await uploadToCloudinary(req.file.buffer)
+      console.log('File uploaded to Cloudinary:', result.secure_url)
+    } catch (cloudinaryError) {
+      console.error('Cloudinary upload error:', cloudinaryError)
+      return res.status(500).json({ 
+        message: 'Failed to upload file to Cloudinary',
+        error: process.env.NODE_ENV === 'development' ? cloudinaryError.message : undefined
+      })
+    }
+
+    // Try AI service check (make it optional if service is not available)
+    let aiResult = {
+      isAuthentic: true,
+      authenticityScore: 0,
+      aiFeedback: 'AI service not available'
+    }
+
+    if (process.env.AI_SERVICE_URL && process.env.AI_SERVICE_URL !== 'http://127.0.0.1:8000') {
+      try {
+        const payload = {
+          metadata: { department, subject, year: Number(year), semester, university },
+          file_url: result.secure_url
+        }
+        const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/check`, payload, {
+          timeout: 30000 // 30 second timeout
+        })
+        aiResult = aiResponse.data
+        console.log('AI check completed:', aiResult)
+      } catch (aiError) {
+        console.error('AI service error:', aiError.message)
+        // Continue without AI check - don't fail the upload
+        aiResult.aiFeedback = `AI check failed: ${aiError.message}`
       }
-      const ai = await axios.post(`${process.env.AI_SERVICE_URL}/check`, payload)
+    } else {
+      console.log('AI service URL not configured, skipping AI check')
+    }
+
+    // Create paper document
+    try {
       const doc = await Paper.create({
         department,
         subject,
@@ -77,15 +125,25 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
         fileUrl: result.secure_url,
         publicId: result.public_id,
         uploadedBy: req.user.id,
-        aiResult: ai.data,
+        aiResult: aiResult,
         status: 'pending'
       })
+      
+      console.log('Paper created successfully:', doc._id)
       return res.json(doc)
-    } catch (e) {
-      return res.status(500).json({ message: 'AI failed' })
+    } catch (dbError) {
+      console.error('Database error:', dbError)
+      return res.status(500).json({ 
+        message: 'Failed to save paper to database',
+        error: process.env.NODE_ENV === 'development' ? dbError.message : undefined
+      })
     }
   } catch (e) {
-    res.status(500).json({ message: 'Upload failed' })
+    console.error('Upload route error:', e)
+    res.status(500).json({ 
+      message: 'Upload failed',
+      error: process.env.NODE_ENV === 'development' ? e.message : undefined
+    })
   }
 })
 

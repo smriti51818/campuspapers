@@ -23,7 +23,9 @@ export default function Upload() {
         nav('/dashboard')
       }, 2000)
     } catch (e) {
-      setMsg('❌ Upload failed. Please try again.')
+      const errorMessage = e.response?.data?.message || e.message || 'Upload failed. Please try again.'
+      setMsg(`❌ ${errorMessage}`)
+      console.error('Upload error:', e.response?.data || e)
     } finally {
       setUploading(false)
     }
