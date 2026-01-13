@@ -99,17 +99,43 @@ app.use('/api/auth', authRoutes)
 app.use('/api', paperRoutes)
 app.use('/api', leaderboardRoutes)
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Global error handler:', err)
+  res.status(err.status || 500).json({
+    message: err.message || 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  })
+})
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' })
+})
+
 const PORT = process.env.PORT || 5000
 
 const start = async () => {
   try {
+    // Check required environment variables
+    if (!process.env.MONGO_URI) {
+      throw new Error('MONGO_URI environment variable is not set')
+    }
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set')
+    }
+    
     await mongoose.connect(process.env.MONGO_URI)
     console.log('MongoDB connected')
+    
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`)
+      console.log(`CORS allowed origins: ${process.env.CLIENT_URL || 'default'}`)
     })
   } catch (e) {
     console.error('Failed to start server:', e.message)
+    console.error('Full error:', e)
     process.exit(1)
   }
 }
