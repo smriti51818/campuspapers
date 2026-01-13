@@ -10,7 +10,7 @@ dotenv.config()
 
 const app = express()
 
-// CORS configuration - allow both localhost and 127.0.0.1 for development
+// CORS configuration - supports both development and production
 const getCorsOrigin = () => {
   if (process.env.CLIENT_URL === '*') return '*'
   
@@ -18,15 +18,30 @@ const getCorsOrigin = () => {
   
   if (process.env.CLIENT_URL) {
     try {
-      const url = new URL(process.env.CLIENT_URL)
-      // Add both localhost and 127.0.0.1 variants
-      const origins = [process.env.CLIENT_URL]
-      if (url.hostname === 'localhost') {
-        origins.push(`http://127.0.0.1:${url.port}`)
-      } else if (url.hostname === '127.0.0.1') {
-        origins.push(`http://localhost:${url.port}`)
-      }
-      return origins
+      const urls = Array.isArray(process.env.CLIENT_URL) 
+        ? process.env.CLIENT_URL 
+        : process.env.CLIENT_URL.split(',').map(url => url.trim())
+      
+      const origins = [...urls]
+      
+      // Add localhost variants for development
+      urls.forEach(url => {
+        try {
+          const urlObj = new URL(url)
+          if (urlObj.hostname === 'localhost') {
+            origins.push(`http://127.0.0.1:${urlObj.port}`)
+          } else if (urlObj.hostname === '127.0.0.1') {
+            origins.push(`http://localhost:${urlObj.port}`)
+          }
+        } catch (e) {
+          // Skip invalid URLs
+        }
+      })
+      
+      // Always include localhost for development
+      origins.push(...defaultOrigins)
+      
+      return [...new Set(origins)] // Remove duplicates
     } catch (e) {
       // If CLIENT_URL is not a valid URL, use defaults
       return defaultOrigins
@@ -41,6 +56,19 @@ app.use(cors({
   credentials: true 
 }))
 app.use(express.json({ limit: '10mb' }))
+
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'CampusPapers Backend API',
+    status: 'running',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      papers: '/api/papers',
+      leaderboard: '/api/leaderboard'
+    }
+  })
+})
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true })
