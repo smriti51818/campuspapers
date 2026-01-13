@@ -89,13 +89,17 @@ export default function Upload() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Semester *</label>
-              <input 
+              <select 
                 className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-                placeholder="e.g., Fall" 
                 value={form.semester} 
                 onChange={e=>setForm({...form,semester:e.target.value})}
                 required
-              />
+              >
+                <option value="">Select Semester</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                  <option key={num} value={num}>Semester {num}</option>
+                ))}
+              </select>
             </div>
           </div>
           
