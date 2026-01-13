@@ -95,7 +95,6 @@ export default function Upload() {
                 onChange={e=>setForm({...form,semester:e.target.value})}
                 required
               >
-                <option value="">Select Semester</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
                   <option key={num} value={num}>Semester {num}</option>
                 ))}
