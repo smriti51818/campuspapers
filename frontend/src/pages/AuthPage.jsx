@@ -9,17 +9,35 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [err, setErr] = useState('')
+  const [emailErr, setEmailErr] = useState('')
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/
+    return emailRegex.test(email)
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault()
     setErr('')
+    setEmailErr('')
+    if (!validateEmail(form.email)) {
+      setEmailErr(`Please enter a part following '@'. '${form.email}' is incomplete.`)
+      return
+    }
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup'
       const { data } = await api.post(endpoint, form)
       login(data.token, data.user)
-      nav('/')
+      // Redirect admin users to admin dashboard
+      if (data.user.role === 'admin') {
+        nav('/admin')
+      } else {
+        nav('/')
+      }
     } catch (e) {
-      setErr(isLogin ? 'Login failed' : 'Signup failed')
+      // Extract specific error message from backend
+      const errorMessage = e.response?.data?.message || (isLogin ? 'Login failed' : 'Signup failed')
+      setErr(errorMessage)
     }
   }
 
@@ -68,8 +86,12 @@ export default function AuthPage() {
           </div>
 
           {err && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded text-sm">
-              {err}
+            <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded text-sm flex items-start gap-3">
+              <span className="text-lg mt-0.5">⚠️</span>
+              <div>
+                <p className="font-semibold mb-1">Login Error</p>
+                <p>{err}</p>
+              </div>
             </div>
           )}
 
@@ -88,9 +110,18 @@ export default function AuthPage() {
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Email"
               value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              onChange={(e) => {
+                setForm({ ...form, email: e.target.value })
+                setEmailErr('')
+              }}
               required
             />
+            {emailErr && (
+              <div className="flex items-center gap-2 bg-orange-50 border-l-4 border-orange-400 text-orange-800 text-sm px-3 py-2 mt-1 rounded shadow-sm">
+                <span className="text-xl">⚠️</span>
+                <span>{emailErr}</span>
+              </div>
+            )}
             <input
               type="password"
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
