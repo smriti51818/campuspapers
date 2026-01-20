@@ -2,6 +2,6 @@
   "builds": [
     { "src": "frontend/package.json", "use": "@vercel/node" }
   ],
-  "buildCommand": "cd frontend && npm run vercel-build",
-  "outputDirectory": "frontend/dist"
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }
