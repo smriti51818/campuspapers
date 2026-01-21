@@ -123,7 +123,7 @@ export default function Papers() {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${i.status === 'approved' ? 'bg-green-100 text-green-700' :
-                      i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                    i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
                     }`}>
                     {i.status}
                   </span>
@@ -181,7 +181,7 @@ export default function Papers() {
             {/* Modal Content - PDF Viewer */}
             <div className="flex-1 bg-gray-100 relative">
               <iframe
-                src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedPaper.fileUrl)}&embedded=true`}
+                src={`${selectedPaper.fileUrl}#toolbar=0&view=FitH`}
                 className="w-full h-full border-0"
                 title={selectedPaper.subject}
               />
