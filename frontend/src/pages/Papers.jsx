@@ -180,11 +180,24 @@ export default function Papers() {
 
             {/* Modal Content - PDF Viewer */}
             <div className="flex-1 bg-gray-100 relative">
-              <iframe
-                src={`${selectedPaper.fileUrl}#toolbar=0&view=FitH`}
-                className="w-full h-full border-0"
-                title={selectedPaper.subject}
-              />
+              <object
+                data={selectedPaper.fileUrl}
+                type="application/pdf"
+                className="w-full h-full"
+              >
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-4">
+                  <div className="text-4xl">⚠️</div>
+                  <p className="text-gray-600 font-medium">Unable to display PDF directly.</p>
+                  <a
+                    href={selectedPaper.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  >
+                    Open PDF in New Tab
+                  </a>
+                </div>
+              </object>
             </div>
 
             {/* Modal Footer */}
