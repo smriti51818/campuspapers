@@ -1,11 +1,26 @@
 import { useEffect, useState } from 'react'
 import api from '../utils/api'
+import { Document, Page, pdfjs } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString();
 
 export default function Papers() {
   const [items, setItems] = useState([])
   const [q, setQ] = useState({ subject: '', department: '', year: '', sort: 'new' })
   const [loading, setLoading] = useState(false)
   const [selectedPaper, setSelectedPaper] = useState(null)
+  const [numPages, setNumPages] = useState(null)
+  const [pageNumber, setPageNumber] = useState(1)
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages)
+    setPageNumber(1)
+  }
 
   const load = async () => {
     setLoading(true)
@@ -179,25 +194,68 @@ export default function Papers() {
             </div>
 
             {/* Modal Content - PDF Viewer */}
-            <div className="flex-1 bg-gray-100 relative">
-              <object
-                data={selectedPaper.fileUrl}
-                type="application/pdf"
-                className="w-full h-full"
+            {/* Modal Content - PDF Viewer */}
+            <div className="flex-1 bg-gray-200 relative overflow-y-auto flex flex-col items-center p-4">
+              <Document
+                file={selectedPaper.fileUrl}
+                onLoadSuccess={onDocumentLoadSuccess}
+                className="shadow-2xl"
+                loading={
+                  <div className="flex flex-col items-center justify-center p-12">
+                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-4"></div>
+                    <span className="text-gray-600 font-medium">Loading PDF...</span>
+                  </div>
+                }
+                error={
+                  <div className="flex flex-col items-center justify-center h-64 text-center p-8 space-y-4 bg-white rounded-xl shadow-sm">
+                    <div className="text-4xl">⚠️</div>
+                    <p className="text-gray-600 font-medium">Unable to display PDF.</p>
+                    <a
+                      href={selectedPaper.fileUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    >
+                      Open in New Tab
+                    </a>
+                  </div>
+                }
               >
-                <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-4">
-                  <div className="text-4xl">⚠️</div>
-                  <p className="text-gray-600 font-medium">Unable to display PDF directly.</p>
-                  <a
-                    href={selectedPaper.fileUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                <Page
+                  pageNumber={pageNumber}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
+                  width={Math.min(window.innerWidth - 64, 800)}
+                  className="bg-white"
+                />
+              </Document>
+
+              {/* Navigation Controls */}
+              {numPages && (
+                <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-6 bg-white/90 backdrop-blur px-8 py-3 rounded-full shadow-2xl border border-gray-200 z-10 transition-all hover:scale-105">
+                  <button
+                    disabled={pageNumber <= 1}
+                    onClick={() => setPageNumber(p => p - 1)}
+                    className="p-2 hover:bg-gray-100 rounded-full disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
                   >
-                    Open PDF in New Tab
-                  </a>
+                    <span className="text-2xl">◀️</span>
+                  </button>
+
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold text-gray-800 text-lg">
+                      {pageNumber} <span className="text-gray-400 font-normal">/</span> {numPages}
+                    </span>
+                  </div>
+
+                  <button
+                    disabled={pageNumber >= numPages}
+                    onClick={() => setPageNumber(p => p + 1)}
+                    className="p-2 hover:bg-gray-100 rounded-full disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+                  >
+                    <span className="text-2xl">▶️</span>
+                  </button>
                 </div>
-              </object>
+              )}
             </div>
 
             {/* Modal Footer */}
