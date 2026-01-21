@@ -46,35 +46,35 @@ export default function Papers() {
       {/* Search Filters */}
       <div className="bg-white rounded-xl p-6 shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-          <input 
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-            placeholder="Subject" 
-            value={q.subject} 
-            onChange={e=>setQ({...q,subject:e.target.value})} 
+          <input
+            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            placeholder="Subject"
+            value={q.subject}
+            onChange={e => setQ({ ...q, subject: e.target.value })}
           />
-          <input 
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-            placeholder="Department" 
-            value={q.department} 
-            onChange={e=>setQ({...q,department:e.target.value})} 
+          <input
+            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            placeholder="Department"
+            value={q.department}
+            onChange={e => setQ({ ...q, department: e.target.value })}
           />
-          <input 
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-            placeholder="Year" 
-            value={q.year} 
-            onChange={e=>setQ({...q,year:e.target.value})} 
+          <input
+            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            placeholder="Year"
+            value={q.year}
+            onChange={e => setQ({ ...q, year: e.target.value })}
           />
-          <select 
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-            value={q.sort} 
-            onChange={e=>setQ({...q,sort:e.target.value})}
+          <select
+            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            value={q.sort}
+            onChange={e => setQ({ ...q, sort: e.target.value })}
           >
             <option value="new">Newest First</option>
             <option value="views">Most Viewed</option>
           </select>
         </div>
-        <button 
-          className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-bold shadow-lg transform hover:scale-105" 
+        <button
+          className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-bold shadow-lg transform hover:scale-105"
           onClick={load}
           disabled={loading}
         >
@@ -97,8 +97,8 @@ export default function Papers() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map(i => (
-            <div 
-              key={i._id} 
+            <div
+              key={i._id}
               className="bg-white rounded-xl p-6 shadow-lg border-2 border-gray-100 card-hover transform hover:scale-105 transition-all"
             >
               <div className="flex items-start justify-between mb-4">
@@ -111,7 +111,7 @@ export default function Papers() {
                   {i.aiResult?.authenticityScore ?? 0}%
                 </div>
               </div>
-              
+
               <div className="space-y-2 mb-4">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <span>👤</span>
@@ -122,16 +122,15 @@ export default function Papers() {
                   <span>{i.views || 0} views</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    i.status === 'approved' ? 'bg-green-100 text-green-700' :
-                    i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}>
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${i.status === 'approved' ? 'bg-green-100 text-green-700' :
+                      i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                    }`}>
                     {i.status}
                   </span>
                 </div>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => setSelectedPaper(i)}
                 className="block w-full text-center px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-md transform hover:scale-105"
               >
@@ -145,8 +144,8 @@ export default function Papers() {
       {/* PDF Preview Modal */}
       {selectedPaper && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedPaper(null)}>
-          <div 
-            className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-up" 
+          <div
+            className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-up"
             onClick={e => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -161,15 +160,15 @@ export default function Papers() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                 <a 
-                  href={selectedPaper.fileUrl} 
+                <a
+                  href={selectedPaper.fileUrl}
                   download
                   className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-gray-100 rounded-full transition-all"
                   title="Download PDF"
                 >
                   📥
                 </a>
-                <button 
+                <button
                   onClick={() => setSelectedPaper(null)}
                   className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                   title="Close"
@@ -181,16 +180,16 @@ export default function Papers() {
 
             {/* Modal Content - PDF Viewer */}
             <div className="flex-1 bg-gray-100 relative">
-              <iframe 
-                src={`${selectedPaper.fileUrl}#toolbar=0&view=FitH`}
+              <iframe
+                src={`https://docs.google.com/gview?url=${encodeURIComponent(selectedPaper.fileUrl)}&embedded=true`}
                 className="w-full h-full border-0"
                 title={selectedPaper.subject}
               />
             </div>
-            
+
             {/* Modal Footer */}
             <div className="p-4 bg-white border-t border-gray-100 text-center text-sm text-gray-500">
-               Previewing {selectedPaper.originalName || 'Paper'} 
+              Previewing {selectedPaper.originalName || 'Paper'}
             </div>
           </div>
         </div>
