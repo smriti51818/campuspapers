@@ -14,7 +14,7 @@ export default function Upload() {
     setMsg('')
     setUploading(true)
     const fd = new FormData()
-    Object.entries(form).forEach(([k,v])=>fd.append(k,v))
+    Object.entries(form).forEach(([k, v]) => fd.append(k, v))
     fd.append('file', file)
     try {
       const { data } = await api.post('/api/papers/upload', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -45,80 +45,80 @@ export default function Upload() {
       {/* Upload Form */}
       <div className="bg-white rounded-xl p-8 shadow-lg border-2 border-gray-100">
         {msg && (
-          <div className={`mb-6 p-4 rounded-lg font-semibold ${
-            msg.includes('✅') ? 'bg-green-100 text-green-700 border-2 border-green-300' : 'bg-red-100 text-red-700 border-2 border-red-300'
-          }`}>
+          <div className={`mb-6 p-4 rounded-lg font-semibold ${msg.includes('✅') ? 'bg-green-100 text-green-700 border-2 border-green-300' : 'bg-red-100 text-red-700 border-2 border-red-300'
+            }`}>
             {msg}
           </div>
         )}
-        
+
         <form onSubmit={submit} className="space-y-5">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Department *</label>
-            <input 
-              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-              placeholder="e.g., Computer Science" 
-              value={form.department} 
-              onChange={e=>setForm({...form,department:e.target.value})}
+            <input
+              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+              placeholder="e.g., Computer Science"
+              value={form.department}
+              onChange={e => setForm({ ...form, department: e.target.value })}
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Subject *</label>
-            <input 
-              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-              placeholder="e.g., Data Structures" 
-              value={form.subject} 
-              onChange={e=>setForm({...form,subject:e.target.value})}
+            <input
+              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+              placeholder="e.g., Data Structures"
+              value={form.subject}
+              onChange={e => setForm({ ...form, subject: e.target.value })}
               required
             />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Year *</label>
-              <input 
-                className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-                placeholder="e.g., 2023" 
+              <input
+                className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+                placeholder="e.g., 2023"
                 type="number"
-                value={form.year} 
-                onChange={e=>setForm({...form,year:e.target.value})}
+                value={form.year}
+                onChange={e => setForm({ ...form, year: e.target.value })}
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Semester *</label>
-              <select 
-                className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-                value={form.semester} 
-                onChange={e=>setForm({...form,semester:e.target.value})}
+              <select
+                className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+                value={form.semester}
+                onChange={e => setForm({ ...form, semester: e.target.value })}
                 required
               >
+                <option value="" disabled>Select Semester</option>
                 {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
                   <option key={num} value={num}>Semester {num}</option>
                 ))}
               </select>
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">University (optional)</label>
-            <input 
-              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors" 
-              placeholder="e.g., MIT" 
-              value={form.university} 
-              onChange={e=>setForm({...form,university:e.target.value})}
+            <input
+              className="w-full border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+              placeholder="e.g., MIT"
+              value={form.university}
+              onChange={e => setForm({ ...form, university: e.target.value })}
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">PDF File *</label>
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition-colors">
-              <input 
-                type="file" 
-                accept="application/pdf" 
-                onChange={e=>setFile(e.target.files[0])}
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={e => setFile(e.target.files[0])}
                 className="hidden"
                 id="file-upload"
                 required
@@ -140,8 +140,8 @@ export default function Upload() {
               </label>
             </div>
           </div>
-          
-          <button 
+
+          <button
             type="submit"
             disabled={uploading}
             className="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-bold text-lg shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
