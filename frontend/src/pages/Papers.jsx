@@ -5,6 +5,7 @@ export default function Papers() {
   const [items, setItems] = useState([])
   const [q, setQ] = useState({ subject: '', department: '', year: '', sort: 'new' })
   const [loading, setLoading] = useState(false)
+  const [selectedPaper, setSelectedPaper] = useState(null)
 
   const load = async () => {
     setLoading(true)
@@ -130,16 +131,68 @@ export default function Papers() {
                 </div>
               </div>
               
-              <a 
-                href={i.fileUrl} 
-                target="_blank" 
-                rel="noreferrer"
+              <button 
+                onClick={() => setSelectedPaper(i)}
                 className="block w-full text-center px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-md transform hover:scale-105"
               >
                 📖 View Paper
-              </a>
+              </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* PDF Preview Modal */}
+      {selectedPaper && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedPaper(null)}>
+          <div 
+            className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-up" 
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50">
+              <div className="flex items-center gap-3">
+                <div className="bg-indigo-100 p-2 rounded-lg">
+                  <span className="text-2xl">📄</span>
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900">{selectedPaper.subject}</h3>
+                  <p className="text-xs text-gray-500">{selectedPaper.department} • {selectedPaper.year}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                 <a 
+                  href={selectedPaper.fileUrl} 
+                  download
+                  className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-gray-100 rounded-full transition-all"
+                  title="Download PDF"
+                >
+                  📥
+                </a>
+                <button 
+                  onClick={() => setSelectedPaper(null)}
+                  className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                  title="Close"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content - PDF Viewer */}
+            <div className="flex-1 bg-gray-100 relative">
+              <iframe 
+                src={`${selectedPaper.fileUrl}#toolbar=0&view=FitH`}
+                className="w-full h-full border-0"
+                title={selectedPaper.subject}
+              />
+            </div>
+            
+            {/* Modal Footer */}
+            <div className="p-4 bg-white border-t border-gray-100 text-center text-sm text-gray-500">
+               Previewing {selectedPaper.originalName || 'Paper'} 
+            </div>
+          </div>
         </div>
       )}
     </div>
