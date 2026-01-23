@@ -147,13 +147,11 @@ export default function Papers() {
                   onClick={() => setSelectedPaper(i)}
                   className="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-md transform hover:scale-105"
                 >
-                  📖 View Paper
+                  📖 Preview Paper
                 </button>
                 <a
                   href={i.fileUrl}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download={`${i.subject}_${i.year}_${i.department}.pdf`}
                   className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold shadow-md transform hover:scale-105 flex items-center justify-center"
                   title="Download PDF"
                   onClick={(e) => e.stopPropagation()}
