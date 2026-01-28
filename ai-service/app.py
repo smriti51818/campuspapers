@@ -42,4 +42,5 @@ async def check_auth(payload: CheckPayload):
     if payload.file_url:
         text = extract_pdf_text_from_url(payload.file_url)
     result = compute_authenticity(text, payload.existing_texts or [])
+    result["extractedText"] = text
     return result
