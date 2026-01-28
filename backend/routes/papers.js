@@ -94,7 +94,7 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
       aiFeedback: 'AI service not available'
     }
 
-    if (process.env.AI_SERVICE_URL && process.env.AI_SERVICE_URL !== 'http://127.0.0.1:8000') {
+    if (process.env.AI_SERVICE_URL) {
       try {
         // Fetch all approved papers' text to check for duplicates
         const approvedPapers = await Paper.find({ status: 'approved' }).select('extractedText')
@@ -105,18 +105,21 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
           file_url: result.secure_url,
           existing_texts: existingTexts
         }
+
+        console.log(`Calling AI Service at: ${process.env.AI_SERVICE_URL}/check`)
         const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/check`, payload, {
-          timeout: 60000 // 60 second timeout for potentially large corpus
+          timeout: 60000
         })
         aiResult = aiResponse.data
-        console.log('AI check completed:', aiResult)
+        console.log('AI check completed successfully')
       } catch (aiError) {
         console.error('AI service error:', aiError.message)
-        // Continue without AI check - don't fail the upload
-        aiResult.aiFeedback = `AI check failed: ${aiError.message}`
+        aiResult.aiFeedback = `Check failed: ${aiError.message}. Please verify AI service is running at ${process.env.AI_SERVICE_URL}`
+        aiResult.authenticityScore = 0 // Keep at 0 to indicate check didn't complete
       }
     } else {
-      console.log('AI service URL not configured, skipping AI check')
+      console.log('AI_SERVICE_URL not found in environment variables')
+      aiResult.aiFeedback = 'AI_SERVICE_URL not configured in environment'
     }
 
     // Create paper document
