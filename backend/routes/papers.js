@@ -58,12 +58,12 @@ router.post('/papers/:id/view', async (req, res) => {
 router.post('/papers/upload', protect, upload.single('file'), async (req, res) => {
   try {
     const { department, subject, year, semester, university } = req.body
-    
+
     // Validate required fields
     if (!department || !subject || !year || !semester) {
       return res.status(400).json({ message: 'Department, subject, year, and semester are required' })
     }
-    
+
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' })
     }
@@ -81,7 +81,7 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
       console.log('File uploaded to Cloudinary:', result.secure_url)
     } catch (cloudinaryError) {
       console.error('Cloudinary upload error:', cloudinaryError)
-      return res.status(500).json({ 
+      return res.status(500).json({
         message: 'Failed to upload file to Cloudinary',
         error: process.env.NODE_ENV === 'development' ? cloudinaryError.message : undefined
       })
@@ -96,12 +96,17 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
 
     if (process.env.AI_SERVICE_URL && process.env.AI_SERVICE_URL !== 'http://127.0.0.1:8000') {
       try {
+        // Fetch all approved papers' text to check for duplicates
+        const approvedPapers = await Paper.find({ status: 'approved' }).select('extractedText')
+        const existingTexts = approvedPapers.map(p => p.extractedText).filter(t => t)
+
         const payload = {
           metadata: { department, subject, year: Number(year), semester, university },
-          file_url: result.secure_url
+          file_url: result.secure_url,
+          existing_texts: existingTexts
         }
         const aiResponse = await axios.post(`${process.env.AI_SERVICE_URL}/check`, payload, {
-          timeout: 30000 // 30 second timeout
+          timeout: 60000 // 60 second timeout for potentially large corpus
         })
         aiResult = aiResponse.data
         console.log('AI check completed:', aiResult)
@@ -125,22 +130,27 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
         fileUrl: result.secure_url,
         publicId: result.public_id,
         uploadedBy: req.user.id,
-        aiResult: aiResult,
+        aiResult: {
+          isAuthentic: aiResult.isAuthentic,
+          authenticityScore: aiResult.authenticityScore,
+          aiFeedback: aiResult.aiFeedback
+        },
+        extractedText: aiResult.extractedText || '',
         status: 'pending'
       })
-      
+
       console.log('Paper created successfully:', doc._id)
       return res.json(doc)
     } catch (dbError) {
       console.error('Database error:', dbError)
-      return res.status(500).json({ 
+      return res.status(500).json({
         message: 'Failed to save paper to database',
         error: process.env.NODE_ENV === 'development' ? dbError.message : undefined
       })
     }
   } catch (e) {
     console.error('Upload route error:', e)
-    res.status(500).json({ 
+    res.status(500).json({
       message: 'Upload failed',
       error: process.env.NODE_ENV === 'development' ? e.message : undefined
     })

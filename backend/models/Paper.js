@@ -15,6 +15,7 @@ const paperSchema = new mongoose.Schema(
       authenticityScore: { type: Number, default: 0 },
       aiFeedback: { type: String, default: '' }
     },
+    extractedText: { type: String, default: '' },
     views: { type: Number, default: 0 },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
   },
