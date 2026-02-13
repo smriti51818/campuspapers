@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
-import { BookOpen, Upload, LayoutDashboard, Trophy, Settings, LogOut, User } from 'lucide-react'
+import { BookOpen, Upload as UploadIcon, LayoutDashboard, Trophy, Settings, LogOut, User } from 'lucide-react'
 import AuthPage from './pages/AuthPage'
 import Upload from './pages/Upload'
 import Dashboard from './pages/Dashboard'
@@ -49,7 +49,7 @@ function AppLayout({ children }) {
                     className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
                     style={{ color: '#09637E' }}
                   >
-                    <Upload className="w-4 h-4" />
+                    <UploadIcon className="w-4 h-4" />
                     Upload
                   </Link>
                   <Link
