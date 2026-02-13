@@ -35,12 +35,12 @@ export default function Leaderboard() {
       {/* Header */}
       <div className="glass-card rounded-3xl p-10 border-2">
         <div className="flex items-center gap-4 mb-3">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#09637E' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#4F46E5' }}>
             <Trophy className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold" style={{ color: '#09637E' }}>Leaderboard</h1>
-            <p className="mt-1" style={{ color: '#088395' }}>Compete with the best contributors</p>
+            <h1 className="text-4xl font-bold" style={{ color: '#4F46E5' }}>Leaderboard</h1>
+            <p className="mt-1" style={{ color: '#6366F1' }}>Compete with the best contributors</p>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ export default function Leaderboard() {
         <button
           onClick={() => setType('uploads')}
           className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${type === 'uploads' ? 'text-white shadow-lg' : ''}`}
-          style={type === 'uploads' ? { background: '#088395' } : { color: '#09637E' }}
+          style={type === 'uploads' ? { background: '#6366F1' } : { color: '#4F46E5' }}
         >
           <Trophy className="w-5 h-5" />
           Top Contributors
@@ -58,7 +58,7 @@ export default function Leaderboard() {
         <button
           onClick={() => setType('views')}
           className={`flex-1 px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${type === 'views' ? 'text-white shadow-lg' : ''}`}
-          style={type === 'views' ? { background: '#088395' } : { color: '#09637E' }}
+          style={type === 'views' ? { background: '#6366F1' } : { color: '#4F46E5' }}
         >
           <Award className="w-5 h-5" />
           Most Popular
@@ -67,7 +67,7 @@ export default function Leaderboard() {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#EBF4F6', borderTopColor: '#088395' }}></div>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#F8FAFC', borderTopColor: '#6366F1' }}></div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -82,8 +82,8 @@ export default function Leaderboard() {
                     <div className="w-16 h-16 mx-auto mb-3 rounded-2xl glass-card flex items-center justify-center shadow-lg border">
                       {getRankIcon(idx)}
                     </div>
-                    <div className="font-bold text-lg" style={{ color: '#09637E' }}>{entry?.name || 'N/A'}</div>
-                    <div className="text-sm mt-1" style={{ color: '#7AB2B2' }}>{entry?.score || 0} {type === 'uploads' ? 'papers' : 'views'}</div>
+                    <div className="font-bold text-lg" style={{ color: '#4F46E5' }}>{entry?.name || 'N/A'}</div>
+                    <div className="text-sm mt-1" style={{ color: '#818CF8' }}>{entry?.score || 0} {type === 'uploads' ? 'papers' : 'views'}</div>
                   </div>
                 )
               })}
@@ -97,25 +97,25 @@ export default function Leaderboard() {
               const isCurrentUser = user?.id === entry.id
 
               return (
-                <div key={entry.id} className={`glass-card rounded-xl p-5 border ${isCurrentUser ? 'border-2' : ''}`} style={isCurrentUser ? { borderColor: '#088395' } : {}}>
+                <div key={entry.id} className={`glass-card rounded-xl p-5 border ${isCurrentUser ? 'border-2' : ''}`} style={isCurrentUser ? { borderColor: '#6366F1' } : {}}>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl glass-card flex items-center justify-center text-white font-bold shadow-lg" style={{ background: '#088395' }}>
+                    <div className="w-12 h-12 rounded-xl glass-card flex items-center justify-center text-white font-bold shadow-lg" style={{ background: '#6366F1' }}>
                       #{rank + 1}
                     </div>
 
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="font-bold" style={{ color: '#09637E' }}>{entry.name}</div>
+                        <div className="font-bold" style={{ color: '#4F46E5' }}>{entry.name}</div>
                         {isCurrentUser && (
-                          <span className="px-2 py-1 text-white text-xs rounded-full font-semibold" style={{ background: '#088395' }}>You</span>
+                          <span className="px-2 py-1 text-white text-xs rounded-full font-semibold" style={{ background: '#6366F1' }}>You</span>
                         )}
                       </div>
-                      <div className="text-sm" style={{ color: '#7AB2B2' }}>{entry.email}</div>
+                      <div className="text-sm" style={{ color: '#818CF8' }}>{entry.email}</div>
                     </div>
 
                     <div className="text-right">
-                      <div className="text-2xl font-bold" style={{ color: '#09637E' }}>{entry.score}</div>
-                      <div className="text-xs" style={{ color: '#7AB2B2' }}>{type === 'uploads' ? 'papers' : 'views'}</div>
+                      <div className="text-2xl font-bold" style={{ color: '#4F46E5' }}>{entry.score}</div>
+                      <div className="text-xs" style={{ color: '#818CF8' }}>{type === 'uploads' ? 'papers' : 'views'}</div>
                     </div>
                   </div>
                 </div>
@@ -125,8 +125,8 @@ export default function Leaderboard() {
 
           {leaderboard.length === 0 && (
             <div className="glass-card rounded-2xl p-16 text-center border">
-              <Trophy className="w-16 h-16 mx-auto mb-4 opacity-50" style={{ color: '#7AB2B2' }} />
-              <p className="font-medium" style={{ color: '#088395' }}>No data available yet</p>
+              <Trophy className="w-16 h-16 mx-auto mb-4 opacity-50" style={{ color: '#818CF8' }} />
+              <p className="font-medium" style={{ color: '#6366F1' }}>No data available yet</p>
             </div>
           )}
         </div>

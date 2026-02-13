@@ -34,12 +34,12 @@ export default function Papers() {
       {/* Header */}
       <div className="glass-card rounded-3xl p-10 border-2">
         <div className="flex items-center gap-4 mb-3">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#09637E' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#4F46E5' }}>
             <BookOpen className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold" style={{ color: '#09637E' }}>Browse Papers</h1>
-            <p className="mt-1" style={{ color: '#088395' }}>Discover past year question papers</p>
+            <h1 className="text-4xl font-bold" style={{ color: '#4F46E5' }}>Browse Papers</h1>
+            <p className="mt-1" style={{ color: '#6366F1' }}>Discover past year question papers</p>
           </div>
         </div>
       </div>
@@ -49,21 +49,21 @@ export default function Papers() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <input
             className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-            style={{ color: '#09637E' }}
+            style={{ color: '#4F46E5' }}
             placeholder="Subject (e.g., Math)"
             value={q.subject}
             onChange={e => setQ({ ...q, subject: e.target.value })}
           />
           <input
             className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-            style={{ color: '#09637E' }}
+            style={{ color: '#4F46E5' }}
             placeholder="Department"
             value={q.department}
             onChange={e => setQ({ ...q, department: e.target.value })}
           />
           <input
             className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-            style={{ color: '#09637E' }}
+            style={{ color: '#4F46E5' }}
             placeholder="Year"
             type="number"
             value={q.year}
@@ -71,7 +71,7 @@ export default function Papers() {
           />
           <select
             className="glass-input rounded-xl px-4 py-3 text-sm font-medium"
-            style={{ color: '#09637E' }}
+            style={{ color: '#4F46E5' }}
             value={q.sort}
             onChange={e => setQ({ ...q, sort: e.target.value })}
           >
@@ -81,7 +81,7 @@ export default function Papers() {
         </div>
         <button
           className="w-full py-3 rounded-xl text-white font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2"
-          style={{ background: '#088395' }}
+          style={{ background: '#6366F1' }}
           onClick={load}
           disabled={loading}
         >
@@ -93,14 +93,14 @@ export default function Papers() {
       {/* Papers Grid */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#EBF4F6', borderTopColor: '#088395' }}></div>
-          <p className="mt-4 font-medium" style={{ color: '#088395' }}>Loading papers...</p>
+          <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#F8FAFC', borderTopColor: '#6366F1' }}></div>
+          <p className="mt-4 font-medium" style={{ color: '#6366F1' }}>Loading papers...</p>
         </div>
       ) : items.length === 0 ? (
         <div className="glass-card rounded-2xl p-16 text-center border">
-          <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-50" style={{ color: '#7AB2B2' }} />
-          <p className="font-medium text-lg" style={{ color: '#088395' }}>No papers found</p>
-          <p className="text-sm mt-2" style={{ color: '#7AB2B2' }}>Try adjusting your search filters</p>
+          <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-50" style={{ color: '#818CF8' }} />
+          <p className="font-medium text-lg" style={{ color: '#6366F1' }}>No papers found</p>
+          <p className="text-sm mt-2" style={{ color: '#818CF8' }}>Try adjusting your search filters</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
@@ -113,26 +113,26 @@ export default function Papers() {
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <div className="w-16 h-16 rounded-2xl glass-card border flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <BookOpen className="w-8 h-8" style={{ color: '#088395' }} />
+                    <BookOpen className="w-8 h-8" style={{ color: '#6366F1' }} />
                   </div>
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-colors" style={{ color: '#09637E' }}>
+                  <h3 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-colors" style={{ color: '#4F46E5' }}>
                     {i.subject}
                   </h3>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#6366F1' }}>
                       {i.department}
                     </span>
-                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#6366F1' }}>
                       {i.year}
                     </span>
-                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#6366F1' }}>
                       {i.semester}
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: '#7AB2B2' }}>
+                  <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: '#818CF8' }}>
                     <div className="flex items-center gap-2">
                       <UserIcon className="w-4 h-4" />
                       <span className="font-medium">{i.uploadedBy?.name ?? 'Unknown'}</span>
@@ -151,7 +151,7 @@ export default function Papers() {
                       setSelectedPaper(i);
                     }}
                     className="px-6 py-3 rounded-xl text-white font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap flex items-center gap-2"
-                    style={{ background: '#088395' }}
+                    style={{ background: '#6366F1' }}
                   >
                     <Eye className="w-4 h-4" />
                     View
@@ -163,7 +163,7 @@ export default function Papers() {
                       load();
                     }}
                     className="px-6 py-3 rounded-xl glass-button font-semibold hover:shadow-lg whitespace-nowrap flex items-center gap-2"
-                    style={{ color: '#09637E' }}
+                    style={{ color: '#4F46E5' }}
                   >
                     <Download className="w-4 h-4" />
                     Download

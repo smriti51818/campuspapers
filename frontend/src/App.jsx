@@ -19,17 +19,17 @@ function AppLayout({ children }) {
   const { user, logout } = useAuth()
 
   return (
-    <div className="min-h-screen" style={{ background: '#EBF4F6' }}>
+    <div className="min-h-screen" style={{ background: '#F8FAFC' }}>
       {/* Glass Navbar */}
       <nav className="glass-navbar sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform" style={{ background: '#09637E' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform" style={{ background: '#4F46E5' }}>
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold hidden sm:block" style={{ color: '#09637E' }}>CampusPapers</span>
+              <span className="text-2xl font-bold hidden sm:block" style={{ color: '#4F46E5' }}>CampusPapers</span>
             </Link>
 
             {/* Navigation Links */}
@@ -37,7 +37,7 @@ function AppLayout({ children }) {
               <Link
                 to="/papers"
                 className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
-                style={{ color: '#09637E' }}
+                style={{ color: '#4F46E5' }}
               >
                 <BookOpen className="w-4 h-4" />
                 Papers
@@ -47,7 +47,7 @@ function AppLayout({ children }) {
                   <Link
                     to="/upload"
                     className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
-                    style={{ color: '#09637E' }}
+                    style={{ color: '#4F46E5' }}
                   >
                     <UploadIcon className="w-4 h-4" />
                     Upload
@@ -55,7 +55,7 @@ function AppLayout({ children }) {
                   <Link
                     to="/dashboard"
                     className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
-                    style={{ color: '#09637E' }}
+                    style={{ color: '#4F46E5' }}
                   >
                     <LayoutDashboard className="w-4 h-4" />
                     Dashboard
@@ -65,7 +65,7 @@ function AppLayout({ children }) {
               <Link
                 to="/leaderboard"
                 className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
-                style={{ color: '#09637E' }}
+                style={{ color: '#4F46E5' }}
               >
                 <Trophy className="w-4 h-4" />
                 Leaderboard
@@ -74,7 +74,7 @@ function AppLayout({ children }) {
                 <Link
                   to="/admin"
                   className="px-4 py-2 rounded-xl transition-all font-semibold text-sm backdrop-blur-sm border flex items-center gap-2"
-                  style={{ background: 'rgba(9, 99, 126, 0.1)', color: '#09637E', borderColor: 'rgba(9, 99, 126, 0.3)' }}
+                  style={{ background: 'rgba(9, 99, 126, 0.1)', color: '#4F46E5', borderColor: 'rgba(9, 99, 126, 0.3)' }}
                 >
                   <Settings className="w-4 h-4" />
                   Admin
@@ -85,10 +85,10 @@ function AppLayout({ children }) {
             {/* User Section */}
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl glass-card">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: '#088395' }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: '#6366F1' }}>
                   {user?.name?.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-semibold" style={{ color: '#09637E' }}>{user?.name}</span>
+                <span className="text-sm font-semibold" style={{ color: '#4F46E5' }}>{user?.name}</span>
               </div>
               <button
                 onClick={logout}

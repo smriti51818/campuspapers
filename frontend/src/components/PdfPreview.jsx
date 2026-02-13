@@ -29,7 +29,7 @@ export default function PdfPreview({ file, title, subtitle, onClose, paperId, on
                 <div className="flex items-center justify-between p-6 border-b" style={{ borderColor: 'rgba(122, 178, 178, 0.2)' }}>
                     <div className="flex-1 min-w-0">
                         <h2 className="text-2xl font-bold text-white truncate">{title}</h2>
-                        {subtitle && <p className="text-sm mt-1" style={{ color: '#EBF4F6' }}>{subtitle}</p>}
+                        {subtitle && <p className="text-sm mt-1" style={{ color: '#F8FAFC' }}>{subtitle}</p>}
                     </div>
                     <button
                         onClick={onClose}
@@ -47,7 +47,7 @@ export default function PdfPreview({ file, title, subtitle, onClose, paperId, on
                         onLoadSuccess={onDocumentLoadSuccess}
                         loading={
                             <div className="flex flex-col items-center gap-4 p-12">
-                                <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: 'rgba(235, 244, 246, 0.3)', borderTopColor: '#EBF4F6' }}></div>
+                                <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: 'rgba(235, 244, 246, 0.3)', borderTopColor: '#F8FAFC' }}></div>
                                 <p className="text-white font-medium">Loading PDF...</p>
                             </div>
                         }
@@ -121,7 +121,7 @@ export default function PdfPreview({ file, title, subtitle, onClose, paperId, on
                         <button
                             onClick={handleDownload}
                             className="px-6 py-2 rounded-xl text-white font-bold transition-all shadow-lg transform hover:scale-105 flex items-center gap-2"
-                            style={{ background: '#088395' }}
+                            style={{ background: '#6366F1' }}
                         >
                             <Download className="w-4 h-4" />
                             Download

@@ -34,12 +34,12 @@ export default function Upload() {
       {/* Header */}
       <div className="glass-card rounded-3xl p-10 border-2">
         <div className="flex items-center gap-4 mb-3">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#09637E' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#4F46E5' }}>
             <UploadIcon className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold" style={{ color: '#09637E' }}>Upload Paper</h1>
-            <p className="mt-1" style={{ color: '#088395' }}>Share knowledge with the community</p>
+            <h1 className="text-4xl font-bold" style={{ color: '#4F46E5' }}>Upload Paper</h1>
+            <p className="mt-1" style={{ color: '#6366F1' }}>Share knowledge with the community</p>
           </div>
         </div>
       </div>
@@ -54,10 +54,10 @@ export default function Upload() {
 
         <form onSubmit={submit} className="space-y-5">
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>Department *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Department *</label>
             <input
               className="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-              style={{ color: '#09637E' }}
+              style={{ color: '#4F46E5' }}
               placeholder="e.g., Computer Science"
               value={form.department}
               onChange={e => setForm({ ...form, department: e.target.value })}
@@ -66,10 +66,10 @@ export default function Upload() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>Subject *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Subject *</label>
             <input
               className="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-              style={{ color: '#09637E' }}
+              style={{ color: '#4F46E5' }}
               placeholder="e.g., Data Structures"
               value={form.subject}
               onChange={e => setForm({ ...form, subject: e.target.value })}
@@ -79,10 +79,10 @@ export default function Upload() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>Year *</label>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Year *</label>
               <input
                 className="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-                style={{ color: '#09637E' }}
+                style={{ color: '#4F46E5' }}
                 placeholder="e.g., 2023"
                 type="number"
                 value={form.year}
@@ -91,10 +91,10 @@ export default function Upload() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>Semester *</label>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Semester *</label>
               <select
                 className="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium"
-                style={{ color: '#09637E' }}
+                style={{ color: '#4F46E5' }}
                 value={form.semester}
                 onChange={e => setForm({ ...form, semester: e.target.value })}
                 required
@@ -108,10 +108,10 @@ export default function Upload() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>University (optional)</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>University (optional)</label>
             <input
               className="w-full glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-              style={{ color: '#09637E' }}
+              style={{ color: '#4F46E5' }}
               placeholder="e.g., MIT"
               value={form.university}
               onChange={e => setForm({ ...form, university: e.target.value })}
@@ -119,7 +119,7 @@ export default function Upload() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{ color: '#09637E' }}>PDF File *</label>
+            <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>PDF File *</label>
             <div className="glass-card border-2 border-dashed rounded-2xl p-8 text-center hover:border-opacity-60 transition-all cursor-pointer" style={{ borderColor: 'rgba(122, 178, 178, 0.5)' }}>
               <input
                 type="file"
@@ -132,15 +132,15 @@ export default function Upload() {
               <label htmlFor="file-upload" className="cursor-pointer">
                 {file ? (
                   <div className="space-y-2">
-                    <FileText className="w-12 h-12 mx-auto" style={{ color: '#088395' }} />
-                    <div className="font-bold" style={{ color: '#09637E' }}>{file.name}</div>
-                    <div className="text-sm" style={{ color: '#7AB2B2' }}>Click to change file</div>
+                    <FileText className="w-12 h-12 mx-auto" style={{ color: '#6366F1' }} />
+                    <div className="font-bold" style={{ color: '#4F46E5' }}>{file.name}</div>
+                    <div className="text-sm" style={{ color: '#818CF8' }}>Click to change file</div>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <UploadIcon className="w-16 h-16 mx-auto" style={{ color: '#7AB2B2' }} />
-                    <div className="font-bold" style={{ color: '#09637E' }}>Click to upload PDF</div>
-                    <div className="text-sm" style={{ color: '#7AB2B2' }}>Maximum file size: 15MB</div>
+                    <UploadIcon className="w-16 h-16 mx-auto" style={{ color: '#818CF8' }} />
+                    <div className="font-bold" style={{ color: '#4F46E5' }}>Click to upload PDF</div>
+                    <div className="text-sm" style={{ color: '#818CF8' }}>Maximum file size: 15MB</div>
                   </div>
                 )}
               </label>
@@ -151,7 +151,7 @@ export default function Upload() {
             type="submit"
             disabled={uploading}
             className="w-full px-6 py-4 text-white rounded-xl transition-all font-bold text-lg shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-            style={{ background: '#088395' }}
+            style={{ background: '#6366F1' }}
           >
             {uploading ? (
               <>

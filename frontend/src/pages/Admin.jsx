@@ -83,12 +83,12 @@ export default function Admin() {
       {/* Header */}
       <div className="glass-card rounded-3xl p-10 border-2">
         <div className="flex items-center gap-4 mb-3">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#09637E' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#4F46E5' }}>
             <Settings className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold" style={{ color: '#09637E' }}>Admin Control</h1>
-            <p className="mt-1" style={{ color: '#088395' }}>Manage papers, users, and platform policies</p>
+            <h1 className="text-4xl font-bold" style={{ color: '#4F46E5' }}>Admin Control</h1>
+            <p className="mt-1" style={{ color: '#6366F1' }}>Manage papers, users, and platform policies</p>
           </div>
         </div>
       </div>
@@ -96,20 +96,20 @@ export default function Admin() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="glass-card rounded-xl p-6 border">
-          <div className="text-sm font-semibold mb-1" style={{ color: '#7AB2B2' }}>Total Papers</div>
-          <div className="text-3xl font-bold" style={{ color: '#09637E' }}>{stats.totalPapers}</div>
+          <div className="text-sm font-semibold mb-1" style={{ color: '#818CF8' }}>Total Papers</div>
+          <div className="text-3xl font-bold" style={{ color: '#4F46E5' }}>{stats.totalPapers}</div>
         </div>
         <div className="glass-card rounded-xl p-6 border">
-          <div className="text-sm font-semibold mb-1" style={{ color: '#7AB2B2' }}>Pending Review</div>
+          <div className="text-sm font-semibold mb-1" style={{ color: '#818CF8' }}>Pending Review</div>
           <div className="text-3xl font-bold" style={{ color: '#ffc107' }}>{stats.pending}</div>
         </div>
         <div className="glass-card rounded-xl p-6 border">
-          <div className="text-sm font-semibold mb-1" style={{ color: '#7AB2B2' }}>Approved</div>
+          <div className="text-sm font-semibold mb-1" style={{ color: '#818CF8' }}>Approved</div>
           <div className="text-3xl font-bold" style={{ color: '#28a745' }}>{stats.approved}</div>
         </div>
         <div className="glass-card rounded-xl p-6 border">
-          <div className="text-sm font-semibold mb-1" style={{ color: '#7AB2B2' }}>Active Users</div>
-          <div className="text-3xl font-bold" style={{ color: '#088395' }}>{stats.users}</div>
+          <div className="text-sm font-semibold mb-1" style={{ color: '#818CF8' }}>Active Users</div>
+          <div className="text-3xl font-bold" style={{ color: '#6366F1' }}>{stats.users}</div>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ export default function Admin() {
           onClick={() => setActiveTab('papers')}
           className={`flex-1 py-3 px-6 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'papers' ? 'text-white shadow-lg' : ''
             }`}
-          style={activeTab === 'papers' ? { background: '#088395' } : { color: '#09637E' }}
+          style={activeTab === 'papers' ? { background: '#6366F1' } : { color: '#4F46E5' }}
         >
           <FileText className="w-5 h-5" />
           Paper Moderation
@@ -128,7 +128,7 @@ export default function Admin() {
           onClick={() => setActiveTab('users')}
           className={`flex-1 py-3 px-6 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'users' ? 'text-white shadow-lg' : ''
             }`}
-          style={activeTab === 'users' ? { background: '#088395' } : { color: '#09637E' }}
+          style={activeTab === 'users' ? { background: '#6366F1' } : { color: '#4F46E5' }}
         >
           <Users className="w-5 h-5" />
           User Management
@@ -142,7 +142,7 @@ export default function Admin() {
             <div className="flex gap-4">
               <input
                 className="flex-1 glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
-                style={{ color: '#09637E' }}
+                style={{ color: '#4F46E5' }}
                 type="number"
                 placeholder="Minimum AI Score (e.g., 70)"
                 value={minScore}
@@ -150,7 +150,7 @@ export default function Admin() {
               />
               <button
                 className="px-6 py-3 text-white rounded-xl transition-all font-bold shadow-lg flex items-center gap-2"
-                style={{ background: '#088395' }}
+                style={{ background: '#6366F1' }}
                 onClick={loadPapers}
                 disabled={loading}
               >
@@ -163,11 +163,11 @@ export default function Admin() {
           {/* Papers List */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
-              <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#EBF4F6', borderTopColor: '#088395' }}></div>
+              <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#F8FAFC', borderTopColor: '#6366F1' }}></div>
             </div>
           ) : items.length === 0 ? (
             <div className="glass-card rounded-2xl p-16 text-center border">
-              <p className="font-medium" style={{ color: '#088395' }}>No papers found</p>
+              <p className="font-medium" style={{ color: '#6366F1' }}>No papers found</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -176,12 +176,12 @@ export default function Admin() {
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex items-center gap-4 flex-1">
                       <div className="w-14 h-14 rounded-xl glass-card border flex items-center justify-center">
-                        <FileText className="w-7 h-7" style={{ color: '#088395' }} />
+                        <FileText className="w-7 h-7" style={{ color: '#6366F1' }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-xl" style={{ color: '#09637E' }}>{i.subject} ({i.year})</div>
-                        <div className="text-sm" style={{ color: '#7AB2B2' }}>{i.department} • {i.university || 'No Univ'}</div>
-                        <div className="text-xs mt-1" style={{ color: '#7AB2B2' }}>By: {i.uploadedBy?.name || 'Unknown'}</div>
+                        <div className="font-bold text-xl" style={{ color: '#4F46E5' }}>{i.subject} ({i.year})</div>
+                        <div className="text-sm" style={{ color: '#818CF8' }}>{i.department} • {i.university || 'No Univ'}</div>
+                        <div className="text-xs mt-1" style={{ color: '#818CF8' }}>By: {i.uploadedBy?.name || 'Unknown'}</div>
                       </div>
                     </div>
 
@@ -193,7 +193,7 @@ export default function Admin() {
                   </div>
 
                   <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t" style={{ borderColor: 'rgba(122, 178, 178, 0.2)' }}>
-                    <a className="px-4 py-2 glass-button rounded-xl font-bold text-sm flex items-center gap-2" style={{ color: '#09637E' }} href={i.fileUrl} target="_blank" rel="noreferrer">
+                    <a className="px-4 py-2 glass-button rounded-xl font-bold text-sm flex items-center gap-2" style={{ color: '#4F46E5' }} href={i.fileUrl} target="_blank" rel="noreferrer">
                       <Eye className="w-4 h-4" />
                       Preview
                     </a>
@@ -224,25 +224,25 @@ export default function Admin() {
           <table className="w-full">
             <thead className="bg-white/50 border-b" style={{ borderColor: 'rgba(122, 178, 178, 0.2)' }}>
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#09637E' }}>User</th>
-                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#09637E' }}>Role</th>
-                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#09637E' }}>Registered</th>
-                <th className="px-6 py-4 text-right text-sm font-bold uppercase" style={{ color: '#09637E' }}>Actions</th>
+                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#4F46E5' }}>User</th>
+                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#4F46E5' }}>Role</th>
+                <th className="px-6 py-4 text-left text-sm font-bold uppercase" style={{ color: '#4F46E5' }}>Registered</th>
+                <th className="px-6 py-4 text-right text-sm font-bold uppercase" style={{ color: '#4F46E5' }}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: 'rgba(122, 178, 178, 0.1)' }}>
               {users.map(u => (
                 <tr key={u._id} className="hover:bg-white/30 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="font-bold" style={{ color: '#09637E' }}>{u.name}</div>
-                    <div className="text-xs" style={{ color: '#7AB2B2' }}>{u.email}</div>
+                    <div className="font-bold" style={{ color: '#4F46E5' }}>{u.name}</div>
+                    <div className="text-xs" style={{ color: '#818CF8' }}>{u.email}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="px-3 py-1 rounded-lg text-xs font-bold glass-card border" style={{ color: u.role === 'admin' ? '#088395' : '#7AB2B2' }}>
+                    <span className="px-3 py-1 rounded-lg text-xs font-bold glass-card border" style={{ color: u.role === 'admin' ? '#6366F1' : '#818CF8' }}>
                       {u.role.toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm" style={{ color: '#7AB2B2' }}>
+                  <td className="px-6 py-4 text-sm" style={{ color: '#818CF8' }}>
                     {new Date(u.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -260,7 +260,7 @@ export default function Admin() {
             </tbody>
           </table>
           {users.length === 0 && !loading && (
-            <div className="p-8 text-center font-medium" style={{ color: '#7AB2B2' }}>No users found</div>
+            <div className="p-8 text-center font-medium" style={{ color: '#818CF8' }}>No users found</div>
           )}
         </div>
       )}

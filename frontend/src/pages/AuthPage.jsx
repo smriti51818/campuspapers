@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BookOpen, Mail, Lock, User, AlertCircle, LogIn, UserPlus } from 'lucide-react'
 import api from '../utils/api'
 import { useAuth } from '../context/AuthContext'
 
@@ -28,44 +29,45 @@ export default function AuthPage() {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup'
       const { data } = await api.post(endpoint, form)
       login(data.token, data.user)
-      // Redirect admin users to admin dashboard
       if (data.user.role === 'admin') {
         nav('/admin')
       } else {
         nav('/')
       }
     } catch (e) {
-      // Extract specific error message from backend
       const errorMessage = e.response?.data?.message || (isLogin ? 'Login failed' : 'Signup failed')
       setErr(errorMessage)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-indigo-600 mb-2">CampusPapers</h1>
-          <p className="text-gray-600">Your academic resource hub</p>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl glass-card-dark mb-4 shadow-2xl">
+            <BookOpen className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-5xl font-bold text-white mb-2">CampusPapers</h1>
+          <p className="text-indigo-100">Your academic resource hub</p>
         </div>
 
         {/* Auth Form Card */}
-        <div className="bg-white rounded-lg shadow-xl p-8">
+        <div className="glass-card rounded-3xl p-8 border-2 shadow-2xl">
+          {/* Tabs */}
           <div className="mb-6">
-            <div className="flex gap-4 border-b">
+            <div className="glass-card rounded-2xl p-1 flex gap-1">
               <button
                 onClick={() => {
                   setIsLogin(true)
                   setErr('')
                   setForm({ name: '', email: '', password: '' })
                 }}
-                className={`pb-3 px-4 font-semibold transition-colors ${
-                  isLogin
-                    ? 'text-indigo-600 border-b-2 border-indigo-600'
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
+                className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 ${isLogin ? 'text-white shadow-lg' : 'text-gray-600'
+                  }`}
+                style={isLogin ? { background: '#4F46E5' } : {}}
               >
+                <LogIn className="w-4 h-4" />
                 Login
               </button>
               <button
@@ -74,74 +76,112 @@ export default function AuthPage() {
                   setErr('')
                   setForm({ name: '', email: '', password: '' })
                 }}
-                className={`pb-3 px-4 font-semibold transition-colors ${
-                  !isLogin
-                    ? 'text-indigo-600 border-b-2 border-indigo-600'
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
+                className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 ${!isLogin ? 'text-white shadow-lg' : 'text-gray-600'
+                  }`}
+                style={!isLogin ? { background: '#4F46E5' } : {}}
               >
+                <UserPlus className="w-4 h-4" />
                 Sign Up
               </button>
             </div>
           </div>
 
+          {/* Error Message */}
           {err && (
-            <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded text-sm flex items-start gap-3">
-              <span className="text-lg mt-0.5">⚠️</span>
+            <div className="mb-4 p-4 rounded-xl border flex items-start gap-3" style={{ background: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#DC2626' }}>
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold mb-1">Login Error</p>
-                <p>{err}</p>
+                <p className="font-semibold mb-1">Authentication Error</p>
+                <p className="text-sm">{err}</p>
               </div>
             </div>
           )}
 
+          {/* Form */}
           <form onSubmit={onSubmit} className="space-y-4">
             {!isLogin && (
-              <input
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Full name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-            )}
-            <input
-              type="email"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Email"
-              value={form.email}
-              onChange={(e) => {
-                setForm({ ...form, email: e.target.value })
-                setEmailErr('')
-              }}
-              required
-            />
-            {emailErr && (
-              <div className="flex items-center gap-2 bg-orange-50 border-l-4 border-orange-400 text-orange-800 text-sm px-3 py-2 mt-1 rounded shadow-sm">
-                <span className="text-xl">⚠️</span>
-                <span>{emailErr}</span>
+              <div>
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Full Name</label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#6366F1' }} />
+                  <input
+                    className="w-full glass-input rounded-xl pl-11 pr-4 py-3 text-sm font-medium"
+                    style={{ color: '#1E293B' }}
+                    placeholder="Enter your full name"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    required
+                  />
+                </div>
               </div>
             )}
-            <input
-              type="password"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-            />
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Email Address</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#6366F1' }} />
+                <input
+                  type="email"
+                  className="w-full glass-input rounded-xl pl-11 pr-4 py-3 text-sm font-medium"
+                  style={{ color: '#1E293B' }}
+                  placeholder="Enter your email"
+                  value={form.email}
+                  onChange={(e) => {
+                    setForm({ ...form, email: e.target.value })
+                    setEmailErr('')
+                  }}
+                  required
+                />
+              </div>
+              {emailErr && (
+                <div className="flex items-center gap-2 mt-2 p-3 rounded-lg border text-sm" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)', color: '#D97706' }}>
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{emailErr}</span>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#4F46E5' }}>Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#6366F1' }} />
+                <input
+                  type="password"
+                  className="w-full glass-input rounded-xl pl-11 pr-4 py-3 text-sm font-medium"
+                  style={{ color: '#1E293B' }}
+                  placeholder="Enter your password"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  required
+                />
+              </div>
+            </div>
+
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+              className="w-full py-3 rounded-xl text-white font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2"
+              style={{ background: '#4F46E5' }}
             >
-              {isLogin ? 'Login' : 'Create Account'}
+              {isLogin ? (
+                <>
+                  <LogIn className="w-5 h-5" />
+                  Login to Account
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-5 h-5" />
+                  Create Account
+                </>
+              )}
             </button>
           </form>
         </div>
+
+        {/* Footer */}
+        <p className="text-center mt-6 text-indigo-100 text-sm">
+          Secure authentication powered by JWT
+        </p>
       </div>
     </div>
   )
 }
-
-
-
