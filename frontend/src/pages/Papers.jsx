@@ -1,23 +1,13 @@
 import { useEffect, useState } from 'react'
 import api from '../utils/api'
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+import PdfPreview from '../components/PdfPreview'
+import { downloadFile } from '../utils/download'
 
 export default function Papers() {
   const [items, setItems] = useState([])
   const [q, setQ] = useState({ subject: '', department: '', year: '', sort: 'new' })
   const [loading, setLoading] = useState(false)
   const [selectedPaper, setSelectedPaper] = useState(null)
-  const [numPages, setNumPages] = useState(null)
-  const [pageNumber, setPageNumber] = useState(1)
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages)
-    setPageNumber(1)
-  }
 
   const load = async () => {
     setLoading(true)
@@ -25,7 +15,7 @@ export default function Papers() {
     if (q.subject) params.set('subject', q.subject)
     if (q.department) params.set('department', q.department)
     if (q.year) params.set('year', q.year)
-    if (q.sort === 'views') params.set('sort', 'views')
+    if (q.sort === 'downloads') params.set('sort', 'downloads')
     try {
       const { data } = await api.get('/api/papers?' + params.toString())
       setItems(data)
@@ -82,7 +72,7 @@ export default function Papers() {
             onChange={e => setQ({ ...q, sort: e.target.value })}
           >
             <option value="new">Newest First</option>
-            <option value="views">Most Viewed</option>
+            <option value="downloads">Most Downloaded</option>
           </select>
         </div>
         <button
@@ -130,8 +120,8 @@ export default function Papers() {
                   <span>{i.uploadedBy?.name ?? 'Unknown'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>👁️</span>
-                  <span>{i.views || 0} views</span>
+                  <span>📥</span>
+                  <span>{i.downloads || 0} downloads</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${i.status === 'approved' ? 'bg-green-100 text-green-700' :
@@ -149,17 +139,17 @@ export default function Papers() {
                 >
                   📖 View Paper
                 </button>
-                <a
-                  href={i.fileUrl}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await downloadFile(i.fileUrl, `${i.subject}.pdf`, i._id);
+                    load();
+                  }}
                   className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold shadow-md transform hover:scale-105 flex items-center justify-center"
                   title="Download PDF"
-                  onClick={(e) => e.stopPropagation()}
                 >
                   📥
-                </a>
+                </button>
               </div>
             </div>
           ))}
@@ -168,112 +158,14 @@ export default function Papers() {
 
       {/* PDF Preview Modal */}
       {selectedPaper && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedPaper(null)}>
-          <div
-            className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-up"
-            onClick={e => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50">
-              <div className="flex items-center gap-3">
-                <div className="bg-indigo-100 p-2 rounded-lg">
-                  <span className="text-2xl">📄</span>
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900">{selectedPaper.subject}</h3>
-                  <p className="text-xs text-gray-500">{selectedPaper.department} • {selectedPaper.year}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <a
-                  href={selectedPaper.fileUrl}
-                  download
-                  className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-gray-100 rounded-full transition-all"
-                  title="Download PDF"
-                >
-                  📥
-                </a>
-                <button
-                  onClick={() => setSelectedPaper(null)}
-                  className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                  title="Close"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Content - PDF Viewer */}
-            {/* Modal Content - PDF Viewer */}
-            <div className="flex-1 bg-gray-200 relative overflow-y-auto flex flex-col items-center p-4">
-              <Document
-                file={selectedPaper.fileUrl}
-                onLoadSuccess={onDocumentLoadSuccess}
-                className="shadow-2xl"
-                loading={
-                  <div className="flex flex-col items-center justify-center p-12">
-                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-4"></div>
-                    <span className="text-gray-600 font-medium">Loading PDF...</span>
-                  </div>
-                }
-                error={
-                  <div className="flex flex-col items-center justify-center h-64 text-center p-8 space-y-4 bg-white rounded-xl shadow-sm">
-                    <div className="text-4xl">⚠️</div>
-                    <p className="text-gray-600 font-medium">Unable to display PDF.</p>
-                    <a
-                      href={selectedPaper.fileUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-                    >
-                      Open in New Tab
-                    </a>
-                  </div>
-                }
-              >
-                <Page
-                  pageNumber={pageNumber}
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                  width={Math.min(window.innerWidth - 64, 800)}
-                  className="bg-white"
-                />
-              </Document>
-
-              {/* Navigation Controls */}
-              {numPages && (
-                <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-6 bg-white/90 backdrop-blur px-8 py-3 rounded-full shadow-2xl border border-gray-200 z-10 transition-all hover:scale-105">
-                  <button
-                    disabled={pageNumber <= 1}
-                    onClick={() => setPageNumber(p => p - 1)}
-                    className="p-2 hover:bg-gray-100 rounded-full disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
-                  >
-                    <span className="text-2xl">◀️</span>
-                  </button>
-
-                  <div className="flex flex-col items-center">
-                    <span className="font-bold text-gray-800 text-lg">
-                      {pageNumber} <span className="text-gray-400 font-normal">/</span> {numPages}
-                    </span>
-                  </div>
-
-                  <button
-                    disabled={pageNumber >= numPages}
-                    onClick={() => setPageNumber(p => p + 1)}
-                    className="p-2 hover:bg-gray-100 rounded-full disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
-                  >
-                    <span className="text-2xl">▶️</span>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Footer */}
-            <div className="p-4 bg-white border-t border-gray-100 text-center text-sm text-gray-500">
-              Previewing {selectedPaper.originalName || 'Paper'}
-            </div>
-          </div>
-        </div>
+        <PdfPreview
+          file={selectedPaper.fileUrl}
+          title={selectedPaper.subject}
+          subtitle={`${selectedPaper.department} • ${selectedPaper.year}`}
+          onClose={() => setSelectedPaper(null)}
+          paperId={selectedPaper._id}
+          onDownload={load}
+        />
       )}
     </div>
   )

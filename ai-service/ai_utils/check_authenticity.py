@@ -12,5 +12,5 @@ def compute_authenticity(new_text: str, existing_texts: List[str]) -> Dict:
     max_sim = float(sims.max()) if sims.size else 0.0
     score = int(max(0.0, (1.0 - max_sim)) * 100)
     is_authentic = max_sim < 0.7
-    feedback = "Low similarity to existing items." if is_authentic else "High similarity with existing items detected."
+    feedback = "Low similarity to existing items." if is_authentic else "Duplication detected"
     return {"isAuthentic": bool(is_authentic), "authenticityScore": int(score), "aiFeedback": feedback}

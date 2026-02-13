@@ -36,20 +36,20 @@ export default function Dashboard() {
   const { user } = useAuth()
   const [items, setItems] = useState([])
   const [badges, setBadges] = useState([])
-  const [stats, setStats] = useState({ totalUploads: 0, totalViews: 0, approvedPapers: 0 })
+  const [stats, setStats] = useState({ totalUploads: 0, totalDownloads: 0, approvedPapers: 0 })
 
   const load = async () => {
     const { data } = await api.get('/api/papers')
     const me = JSON.parse(localStorage.getItem('user') || 'null')
     const myItems = data.filter(d => d.uploadedBy?._id === me?.id)
     setItems(myItems)
-    
+
     // Calculate stats
     const approved = myItems.filter(i => i.status === 'approved').length
-    const totalViews = myItems.reduce((sum, i) => sum + (i.views || 0), 0)
+    const totalDownloads = myItems.reduce((sum, i) => sum + (i.downloads || 0), 0)
     setStats({
       totalUploads: myItems.length,
-      totalViews,
+      totalDownloads,
       approvedPapers: approved
     })
 
@@ -89,7 +89,7 @@ export default function Dashboard() {
         <h1 className="text-4xl font-bold mb-2">My Dashboard</h1>
         <p className="text-indigo-100">Track your contributions and achievements</p>
       </div>
-      
+
       {/* Stats Cards */}
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg card-hover transform hover:scale-105 transition-all">
@@ -112,11 +112,11 @@ export default function Dashboard() {
 
         <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white shadow-lg card-hover transform hover:scale-105 transition-all">
           <div className="flex items-center justify-between mb-4">
-            <div className="text-3xl">👁️</div>
-            <div className="text-4xl font-bold">{stats.totalViews}</div>
+            <div className="text-3xl">📥</div>
+            <div className="text-4xl font-bold">{stats.totalDownloads}</div>
           </div>
-          <div className="text-purple-100 font-medium">Total Views</div>
-          <div className="text-purple-200 text-sm mt-1">Your papers are popular!</div>
+          <div className="text-purple-100 font-medium">Total Downloads</div>
+          <div className="text-purple-200 text-sm mt-1">Your papers are high in demand!</div>
         </div>
       </div>
 
@@ -133,7 +133,7 @@ export default function Dashboard() {
               <span>{nextBadge.current} / {nextBadge.target}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-              <div 
+              <div
                 className={`h-full bg-gradient-to-r ${BADGE_GRADIENTS[nextBadge.badge] || 'from-indigo-500 to-purple-500'} rounded-full progress-bar flex items-center justify-end pr-2`}
                 style={{ width: `${Math.min(nextBadge.progress, 100)}%` }}
               >
@@ -198,8 +198,8 @@ export default function Dashboard() {
             </div>
           ) : (
             items.map(i => (
-              <div 
-                key={i._id} 
+              <div
+                key={i._id}
                 className="bg-white p-5 rounded-xl border-2 border-gray-100 shadow-md card-hover flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="flex-1">
@@ -208,18 +208,17 @@ export default function Dashboard() {
                     <div className="font-bold text-lg text-gray-800">{i.subject}</div>
                   </div>
                   <div className="text-sm text-gray-600 mb-2">
-                    {i.department} • {i.year} • 
-                    <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                      i.status === 'approved' ? 'bg-green-100 text-green-700' :
-                      i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                    {i.department} • {i.year} •
+                    <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${i.status === 'approved' ? 'bg-green-100 text-green-700' :
+                        i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
+                      }`}>
                       {i.status.toUpperCase()}
                     </span>
                   </div>
                   <div className="flex gap-4 text-sm">
                     <div className="flex items-center gap-1 text-gray-600">
-                      <span>👁️</span>
-                      <span className="font-medium">{i.views || 0} views</span>
+                      <span>📥</span>
+                      <span className="font-medium">{i.downloads || 0} downloads</span>
                     </div>
                     <div className="flex items-center gap-1 text-gray-600">
                       <span>🤖</span>
@@ -228,16 +227,16 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <a 
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-md transform hover:scale-105" 
-                    href={i.fileUrl} 
-                    target="_blank" 
+                  <a
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-md transform hover:scale-105"
+                    href={i.fileUrl}
+                    target="_blank"
                     rel="noreferrer"
                   >
                     Preview
                   </a>
-                  <button 
-                    className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors font-semibold shadow-md transform hover:scale-105" 
+                  <button
+                    className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors font-semibold shadow-md transform hover:scale-105"
                     onClick={() => delItem(i._id)}
                   >
                     Delete

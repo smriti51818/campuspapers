@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import axios from 'axios'
-import { protect, requireRole } from '../middleware/auth.js'
+import { protect, requireRole, optionalProtect } from '../middleware/auth.js'
 import { checkOwnership } from '../middleware/ownership.js'
 import { uploadToCloudinary } from '../utils/cloudinaryUpload.js'
 import { checkAndAwardBadges } from '../utils/badges.js'
@@ -10,14 +10,25 @@ import Paper from '../models/Paper.js'
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } })
 
-router.get('/papers', async (req, res) => {
+router.get('/papers', optionalProtect, async (req, res) => {
   try {
     const { subject, department, year, sort } = req.query
+
+    // Role-based visibility: Admins see all, others only see non-duplicates
     const q = {}
+    const isAdmin = req.user && req.user.role === 'admin'
+
+    if (!isAdmin) {
+      // HIDE DUPLICATES (score 0) and UNAPPROVED PAPERS for non-admins
+      q['aiResult.authenticityScore'] = { $gt: 0 }
+      q.status = 'approved'
+    }
+
     if (subject) q.subject = new RegExp(subject, 'i')
     if (department) q.department = new RegExp(department, 'i')
     if (year) q.year = Number(year)
-    const sortBy = sort === 'views' ? { views: -1 } : { createdAt: -1 }
+
+    const sortBy = sort === 'downloads' ? { downloads: -1 } : { createdAt: -1 }
     const items = await Paper.find(q).populate('uploadedBy', 'name').sort(sortBy)
     res.json(items)
   } catch (e) {
@@ -45,9 +56,10 @@ router.get('/papers/:id', getPaperById, async (req, res) => {
   }
 })
 
-router.post('/papers/:id/view', async (req, res) => {
+router.post('/papers/:id/download', async (req, res) => {
   try {
-    const item = await Paper.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } }, { new: true })
+    console.log(`Incrementing downloads for paper: ${req.params.id}`)
+    const item = await Paper.findByIdAndUpdate(req.params.id, { $inc: { downloads: 1 } }, { new: true })
     if (!item) return res.status(404).json({ message: 'Not found' })
     res.json(item)
   } catch (e) {
@@ -96,9 +108,9 @@ router.post('/papers/upload', protect, upload.single('file'), async (req, res) =
 
     if (process.env.AI_SERVICE_URL) {
       try {
-        // Fetch all approved papers' text to check for duplicates
-        const approvedPapers = await Paper.find({ status: 'approved' }).select('extractedText')
-        const existingTexts = approvedPapers.map(p => p.extractedText).filter(t => t)
+        // Fetch all existing papers' text to check for duplicates
+        const allPapers = await Paper.find({}).select('extractedText')
+        const existingTexts = allPapers.map(p => p.extractedText).filter(t => t)
 
         const payload = {
           metadata: { department, subject, year: Number(year), semester, university },

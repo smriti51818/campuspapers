@@ -18,18 +18,21 @@ async function migrate() {
         await mongoose.connect(MONGO_URI);
         console.log("Connected to MongoDB.");
 
-        const papers = await Paper.find({ $or: [{ extractedText: "" }, { extractedText: { $exists: false } }] });
-        console.log(`Found ${papers.length} papers needing text extraction.`);
+        // Sort EVERYTHING by date to ensure we process chronologically
+        const papers = await Paper.find({}).sort({ createdAt: 1 });
+        console.log(`Processing ${papers.length} papers for chronological authenticity re-evaluation.`);
 
         for (const paper of papers) {
-            console.log(`Processing Paper: ${paper.subject} (${paper._id})`);
+            console.log(`Processing Paper: ${paper.subject} (${paper._id}) - ${paper.createdAt}`);
             try {
-                // Call AI service to get text and score
-                // We send an empty existing_texts for now to at least get the text extracted
+                // Fetch papers uploaded BEFORE this one
+                const previousPapers = await Paper.find({ createdAt: { $lt: paper.createdAt } }).select('extractedText');
+                const existingTexts = previousPapers.map(p => p.extractedText).filter(t => t);
+
                 const response = await axios.post(`${AI_SERVICE_URL}/check`, {
                     metadata: { subject: paper.subject, department: paper.department, year: paper.year, semester: paper.semester },
                     file_url: paper.fileUrl,
-                    existing_texts: []
+                    existing_texts: existingTexts
                 });
 
                 const { extractedText, authenticityScore, isAuthentic, aiFeedback } = response.data;
@@ -38,11 +41,11 @@ async function migrate() {
                 paper.aiResult = {
                     authenticityScore,
                     isAuthentic,
-                    aiFeedback: "Migrated: " + aiFeedback
+                    aiFeedback: aiFeedback
                 };
 
                 await paper.save();
-                console.log(`✅ Success for ${paper._id}`);
+                console.log(`✅ Success for ${paper._id} - Score: ${authenticityScore}% - ${aiFeedback}`);
             } catch (err) {
                 console.error(`❌ Failed for ${paper._id}: ${err.message}`);
             }

@@ -13,6 +13,23 @@ export const protect = (req, res, next) => {
   }
 }
 
+export const optionalProtect = (req, res, next) => {
+  const header = req.headers.authorization || ''
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null
+  if (!token) {
+    req.user = null
+    return next()
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    req.user = decoded
+    next()
+  } catch (e) {
+    req.user = null
+    next()
+  }
+}
+
 export const requireRole = (role) => (req, res, next) => {
   if (!req.user || req.user.role !== role) return res.status(403).json({ message: 'Forbidden' })
   next()
