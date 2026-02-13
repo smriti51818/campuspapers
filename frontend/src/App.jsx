@@ -19,7 +19,7 @@ function AppLayout({ children }) {
   const { user, logout } = useAuth()
 
   return (
-    <div className="min-h-screen" style={{ background: '#F8FAFC' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       {/* Glass Navbar */}
       <nav className="glass-navbar sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
