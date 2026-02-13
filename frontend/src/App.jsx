@@ -29,12 +29,16 @@ function AppLayout({ children }) {
               <Link to="/papers" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
                 📄 Papers
               </Link>
-              <Link to="/upload" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                📤 Upload
-              </Link>
-              <Link to="/dashboard" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                📊 Dashboard
-              </Link>
+              {user?.role !== 'admin' && (
+                <>
+                  <Link to="/upload" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
+                    📤 Upload
+                  </Link>
+                  <Link to="/dashboard" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
+                    📊 Dashboard
+                  </Link>
+                </>
+              )}
               <Link to="/leaderboard" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
                 🏆 Leaderboard
               </Link>

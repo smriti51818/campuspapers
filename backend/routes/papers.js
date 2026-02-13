@@ -224,4 +224,13 @@ router.put('/admin/papers/:id/reject', protect, requireRole('admin'), async (req
   }
 })
 
+router.delete('/admin/papers/:id', protect, requireRole('admin'), async (req, res) => {
+  try {
+    await Paper.findByIdAndDelete(req.params.id)
+    res.json({ ok: true })
+  } catch (e) {
+    res.status(500).json({ message: 'Failed' })
+  }
+})
+
 export default router
