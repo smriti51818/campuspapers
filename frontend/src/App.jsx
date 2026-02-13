@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { BookOpen, Upload, LayoutDashboard, Trophy, Settings, LogOut, User } from 'lucide-react'
 import AuthPage from './pages/AuthPage'
 import Upload from './pages/Upload'
 import Dashboard from './pages/Dashboard'
@@ -18,51 +19,92 @@ function AppLayout({ children }) {
   const { user, logout } = useAuth()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
-      <nav className="bg-white border-b-2 border-indigo-100 shadow-lg">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex gap-4 items-center justify-between">
-          <div className="flex gap-2 items-center">
-            <Link to="/" className="font-bold text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform">
-              📚 CampusPapers
+    <div className="min-h-screen" style={{ background: '#EBF4F6' }}>
+      {/* Glass Navbar */}
+      <nav className="glass-navbar sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform" style={{ background: '#09637E' }}>
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-2xl font-bold hidden sm:block" style={{ color: '#09637E' }}>CampusPapers</span>
             </Link>
-            <div className="flex gap-1 ml-4">
-              <Link to="/papers" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                📄 Papers
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-2">
+              <Link
+                to="/papers"
+                className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
+                style={{ color: '#09637E' }}
+              >
+                <BookOpen className="w-4 h-4" />
+                Papers
               </Link>
               {user?.role !== 'admin' && (
                 <>
-                  <Link to="/upload" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                    📤 Upload
+                  <Link
+                    to="/upload"
+                    className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
+                    style={{ color: '#09637E' }}
+                  >
+                    <Upload className="w-4 h-4" />
+                    Upload
                   </Link>
-                  <Link to="/dashboard" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                    📊 Dashboard
+                  <Link
+                    to="/dashboard"
+                    className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
+                    style={{ color: '#09637E' }}
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
                   </Link>
                 </>
               )}
-              <Link to="/leaderboard" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                🏆 Leaderboard
+              <Link
+                to="/leaderboard"
+                className="px-4 py-2 rounded-xl hover:bg-white/50 transition-all font-medium text-sm backdrop-blur-sm flex items-center gap-2"
+                style={{ color: '#09637E' }}
+              >
+                <Trophy className="w-4 h-4" />
+                Leaderboard
               </Link>
               {user?.role === 'admin' && (
-                <Link to="/admin" className="px-3 py-2 rounded-lg text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all font-medium text-sm">
-                  ⚙️ Admin
+                <Link
+                  to="/admin"
+                  className="px-4 py-2 rounded-xl transition-all font-semibold text-sm backdrop-blur-sm border flex items-center gap-2"
+                  style={{ background: 'rgba(9, 99, 126, 0.1)', color: '#09637E', borderColor: 'rgba(9, 99, 126, 0.3)' }}
+                >
+                  <Settings className="w-4 h-4" />
+                  Admin
                 </Link>
               )}
             </div>
-          </div>
-          <div className="flex gap-3 items-center">
-            <div className="px-3 py-1 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full">
-              <span className="text-sm font-semibold text-indigo-700">👤 {user?.name}</span>
+
+            {/* User Section */}
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl glass-card">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: '#088395' }}>
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm font-semibold" style={{ color: '#09637E' }}>{user?.name}</span>
+              </div>
+              <button
+                onClick={logout}
+                className="px-4 py-2 rounded-xl transition-all font-semibold text-sm backdrop-blur-sm border flex items-center gap-2"
+                style={{ background: 'rgba(220, 53, 69, 0.1)', color: '#dc3545', borderColor: 'rgba(220, 53, 69, 0.3)' }}
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
             </div>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-all font-semibold text-sm shadow-md hover:scale-105 transform"
-            >
-              Logout
-            </button>
           </div>
         </div>
       </nav>
-      <div className="max-w-6xl mx-auto p-4">
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {children}
       </div>
     </div>
@@ -97,4 +139,3 @@ export default function App() {
     </AppLayout>
   )
 }
-

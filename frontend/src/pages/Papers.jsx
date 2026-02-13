@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { BookOpen, Filter, Download, Eye, Search, User as UserIcon } from 'lucide-react'
 import api from '../utils/api'
 import PdfPreview from '../components/PdfPreview'
 import { downloadFile } from '../utils/download'
@@ -28,46 +29,49 @@ export default function Papers() {
 
   useEffect(() => { load() }, [])
 
-  const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600 bg-green-100'
-    if (score >= 60) return 'text-yellow-600 bg-yellow-100'
-    return 'text-red-600 bg-red-100'
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-5xl">📚</span>
-          <h1 className="text-4xl font-bold">Browse Papers</h1>
+      <div className="glass-card rounded-3xl p-10 border-2">
+        <div className="flex items-center gap-4 mb-3">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl" style={{ background: '#09637E' }}>
+            <BookOpen className="w-8 h-8 text-white" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold" style={{ color: '#09637E' }}>Browse Papers</h1>
+            <p className="mt-1" style={{ color: '#088395' }}>Discover past year question papers</p>
+          </div>
         </div>
-        <p className="text-indigo-100">Find past year question papers</p>
       </div>
 
-      {/* Search Filters */}
-      <div className="bg-white rounded-xl p-6 shadow-lg">
+      {/* Filter Panel */}
+      <div className="glass-card rounded-2xl p-6 border">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <input
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
-            placeholder="Subject"
+            className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
+            style={{ color: '#09637E' }}
+            placeholder="Subject (e.g., Math)"
             value={q.subject}
             onChange={e => setQ({ ...q, subject: e.target.value })}
           />
           <input
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
+            style={{ color: '#09637E' }}
             placeholder="Department"
             value={q.department}
             onChange={e => setQ({ ...q, department: e.target.value })}
           />
           <input
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            className="glass-input rounded-xl px-4 py-3 text-sm font-medium placeholder-gray-400"
+            style={{ color: '#09637E' }}
             placeholder="Year"
+            type="number"
             value={q.year}
             onChange={e => setQ({ ...q, year: e.target.value })}
           />
           <select
-            className="border-2 border-gray-200 rounded-lg p-3 focus:border-indigo-500 focus:outline-none transition-colors"
+            className="glass-input rounded-xl px-4 py-3 text-sm font-medium"
+            style={{ color: '#09637E' }}
             value={q.sort}
             onChange={e => setQ({ ...q, sort: e.target.value })}
           >
@@ -76,87 +80,101 @@ export default function Papers() {
           </select>
         </div>
         <button
-          className="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-bold shadow-lg transform hover:scale-105"
+          className="w-full py-3 rounded-xl text-white font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2"
+          style={{ background: '#088395' }}
           onClick={load}
           disabled={loading}
         >
-          {loading ? 'Searching...' : '🔍 Search Papers'}
+          <Search className="w-5 h-5" />
+          {loading ? 'Searching...' : 'Search Papers'}
         </button>
       </div>
 
-      {/* Results */}
+      {/* Papers Grid */}
       {loading ? (
-        <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600">Loading papers...</p>
+        <div className="flex flex-col items-center justify-center py-20">
+          <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: '#EBF4F6', borderTopColor: '#088395' }}></div>
+          <p className="mt-4 font-medium" style={{ color: '#088395' }}>Loading papers...</p>
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl shadow-lg">
-          <div className="text-6xl mb-4">🔍</div>
-          <p className="text-gray-600 font-medium text-lg">No papers found</p>
-          <p className="text-gray-500 text-sm mt-2">Try adjusting your search filters</p>
+        <div className="glass-card rounded-2xl p-16 text-center border">
+          <BookOpen className="w-16 h-16 mx-auto mb-4 opacity-50" style={{ color: '#7AB2B2' }} />
+          <p className="font-medium text-lg" style={{ color: '#088395' }}>No papers found</p>
+          <p className="text-sm mt-2" style={{ color: '#7AB2B2' }}>Try adjusting your search filters</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-4">
           {items.map(i => (
             <div
               key={i._id}
-              className="bg-white rounded-xl p-6 shadow-lg border-2 border-gray-100 card-hover transform hover:scale-105 transition-all"
+              className="glass-card rounded-2xl p-6 border group cursor-pointer animate-slide-up"
+              onClick={() => setSelectedPaper(i)}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="text-3xl mb-2">📄</div>
-                  <div className="font-bold text-lg text-gray-800 mb-1">{i.subject}</div>
-                  <div className="text-sm text-gray-600">{i.department} • {i.year}</div>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl glass-card border flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <BookOpen className="w-8 h-8" style={{ color: '#088395' }} />
+                  </div>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-bold ${getScoreColor(i.aiResult?.authenticityScore ?? 0)}`}>
-                  {i.aiResult?.authenticityScore ?? 0}%
-                </div>
-              </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>👤</span>
-                  <span>{i.uploadedBy?.name ?? 'Unknown'}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl font-bold mb-2 group-hover:opacity-80 transition-colors" style={{ color: '#09637E' }}>
+                    {i.subject}
+                  </h3>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                      {i.department}
+                    </span>
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                      {i.year}
+                    </span>
+                    <span className="px-3 py-1 rounded-lg text-xs font-semibold glass-card border" style={{ color: '#088395' }}>
+                      {i.semester}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: '#7AB2B2' }}>
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-4 h-4" />
+                      <span className="font-medium">{i.uploadedBy?.name ?? 'Unknown'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Download className="w-4 h-4" />
+                      <span className="font-medium">{i.downloads || 0} downloads</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>📥</span>
-                  <span>{i.downloads || 0} downloads</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${i.status === 'approved' ? 'bg-green-100 text-green-700' :
-                    i.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                    {i.status}
-                  </span>
-                </div>
-              </div>
 
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setSelectedPaper(i)}
-                  className="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all font-semibold shadow-md transform hover:scale-105"
-                >
-                  📖 View Paper
-                </button>
-                <button
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await downloadFile(i.fileUrl, `${i.subject}.pdf`, i._id);
-                    load();
-                  }}
-                  className="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-semibold shadow-md transform hover:scale-105 flex items-center justify-center"
-                  title="Download PDF"
-                >
-                  📥
-                </button>
+                <div className="flex flex-col gap-2 flex-shrink-0">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPaper(i);
+                    }}
+                    className="px-6 py-3 rounded-xl text-white font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap flex items-center gap-2"
+                    style={{ background: '#088395' }}
+                  >
+                    <Eye className="w-4 h-4" />
+                    View
+                  </button>
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      await downloadFile(i.fileUrl, `${i.subject}.pdf`, i._id);
+                      load();
+                    }}
+                    className="px-6 py-3 rounded-xl glass-button font-semibold hover:shadow-lg whitespace-nowrap flex items-center gap-2"
+                    style={{ color: '#09637E' }}
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* PDF Preview Modal */}
       {selectedPaper && (
         <PdfPreview
           file={selectedPaper.fileUrl}
